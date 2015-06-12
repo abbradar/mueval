@@ -1,4 +1,5 @@
 {-# LANGUAGE PatternGuards #-}
+{-# LANGUAGE FlexibleContexts #-} 
 -- TODO: suggest the convenience functions be put into Hint proper?
 module Mueval.Interpreter where
 
@@ -11,8 +12,6 @@ import System.Directory (copyFile, makeRelativeToCurrentDirectory, removeFile, s
 import System.Exit (exitFailure)
 import System.FilePath.Posix (takeFileName)
 import qualified Control.Exception.Extensible as E (evaluate,catch,SomeException(..))
-
-import qualified System.IO.UTF8 as UTF (putStrLn)
 
 import Language.Haskell.Interpreter (eval, set, reset, setImportsQ, loadModules, liftIO,
                                      installedModulesInScope, languageExtensions,
@@ -100,7 +99,7 @@ mvload lfl = do canonfile <- makeRelativeToCurrentDirectory lfl
 -- flooding. Lambdabot has a similar limit.
 sayIO :: String -> IO ()
 sayIO str = do (out,b) <- render 1024 str
-               UTF.putStrLn out
+               putStrLn out
                when b exitFailure
 
 -- | Oh no, something has gone wrong. If it's a compilation error pretty print
